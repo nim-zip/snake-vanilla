@@ -1,0 +1,33 @@
+
+:root {
+	margin: 0;
+	padding: 0;
+}
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+
+#grid {
+	height: 50vh;
+	width: 50vw;
+	margin: 0;
+	padding: 0;
+	background-color: #0f0f0f;
+	font-family: 'Courier New', Courier, monospace;
+	color: white;
+}
+
+#snake {
+	background-color: white;
+	position: absolute;
+}
+
+#food {
+	background-color: red;
+	position: absolute;
+}
