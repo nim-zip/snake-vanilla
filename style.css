@@ -12,7 +12,7 @@ body {
 }
 
 
-#grid {
+#Grid {
 	height: 50vh;
 	width: 50vw;
 	margin: 0;
@@ -22,12 +22,12 @@ body {
 	color: white;
 }
 
-#snake {
+[id^='snake'] {
 	background-color: white;
 	position: absolute;
 }
 
-#food {
+#Food {
 	background-color: red;
 	position: absolute;
 }
