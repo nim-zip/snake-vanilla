@@ -26,46 +26,38 @@ snakeEl.height = cellHeight + 'px';
 let [x, y] = [1, 1];
 let dir = 'r';
 let totalEaten = 0;
-// let grid = [];
-
-// for (var i = 0; i < rows; ++i) {
-// 	const arrayRow = new Array(cols).fill(0);
-// 	grid.push(arrayRow);
-// }
-
-
-
-
-
-// DIRECTION NOT UPDATING PROPERLY. LOOKS SUPER BUGGY
-
 
 const changeDir = (event) => {
 	switch(event.keyCode) {
-		case 38: return 'u'; break; 
-		case 40: return 'd'; break;
-		case 37: return 'l'; break;
-		case 39: return 'r'; break;
+		case 38: { return 'u'; break; } 
+		case 40: { return 'd'; break; }
+		case 37: { return 'l'; break; }
+		case 39: { return 'r'; break; }
+		default: return dir;
 	};
 }
 document.addEventListener('keydown', (event) => (dir = changeDir(event)));
 
 
-const showSnake = (x, y, dir) => {
-	snakeEl.left = ((x%rows)*cellWidth) + 'px';
-	snakeEl.top = ((y%cols)*cellHeight) + 'px';
+const showSnake = (x, y) => {
+	snakeEl.left = (x*cellWidth) + 'px';
+	snakeEl.top = (y*cellHeight) + 'px';
 }
 
-printf(snakeEl);
 const updateGrid = () => {
-	showSnake(x, y);
 	switch (dir) {
-		case ('u'): --y;
-		case ('d'): ++y;
-		case ('l'): --x;
-		case ('r'): ++x;
+		case 'u': { y -= 1; break; }
+		case 'l': { x -= 1; break; }
+		case 'd': { y += 1; break; }
+		case 'r': { x += 1; break; }
 	}
-	printf(dir);
+	x = x < 0 ? (x + rows)%rows : x%rows;
+	y = y < 0 ? (y + cols)%cols : y%cols;
+	showSnake(x, y);
+	if ((snakeEl.left == foodEl.left) && (snakeEl.top == foodEl.top)) {
+		getNewFoodLocation();
+	}
+	printf([[snakeEl.left, snakeEl.top], [foodEl.left, foodEl.top], dir]);
 }
 
 const getNewFoodLocation = () => {
@@ -73,6 +65,7 @@ const getNewFoodLocation = () => {
 	foodEl.top = Math.floor(Math.random() * cols) * cellHeight + 'px';
 }
 
-// setInterval(updateGrid, 50);
+getNewFoodLocation();
+setInterval(updateGrid, 100);
 
 
