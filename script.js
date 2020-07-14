@@ -43,24 +43,61 @@ const changeDir = (event) => {
 		case 37: { return 'l'; break; }
 		case 39: { return 'r'; break; }
 		default: return dir;
+		
 	};
 }
 document.addEventListener('keydown', (event) => (dir = changeDir(event)));
-
-const showSnake = (snakePos) => {
+/* 
+const updateSnakePos = (newX, newY) => {
+	for (let i = 1; i < snakePos.length; ++i) {
+		snakePos[i].x = snakePos[i-1].x;
+		snakePos[i].y = snakePos[i-1].y;
+	}
+	snakePos[0].x = newX;
+	snakePos[0].y = newY;
 	for (let i = 0; i < snakePos.length; ++i) {
 		let tempSnake = document.getElementById('snake' + i).style;
 		tempSnake.left = (snakePos[i].x * cellWidth) + 'px';
 		tempSnake.top = (snakePos[i].y * cellHeight) + 'px';
 	}
 }
+ */
 
-const updateSnakePos = (newX, newY) => {
-	snakePos[0].x = newX;
-	snakePos[0].y = newY;
-	for (let i = 1; i < snakePos.length; ++i) {
+const updateSnake = (dir) => {
+	// for (let i = 1; i < snakePos.length; ++i) {
+	// 	snakePos[i].x = snakePos[i-1].x;
+	// 	snakePos[i].y = snakePos[i-1].y;
+	// 	let tempSnake = document.getElementById('snake' + i).style;
+	// 	tempSnake.left = (snakePos[i].x * cellWidth) + 'px';
+	// 	tempSnake.top = (snakePos[i].y * cellHeight) + 'px';
+	// }
+	for (let i = snakePos.length - 1; i > 0; --i) {
 		snakePos[i].x = snakePos[i-1].x;
 		snakePos[i].y = snakePos[i-1].y;
+		let tempSnake = document.getElementById('snake' + i).style;
+		tempSnake.left = (snakePos[i].x * cellWidth) + 'px';
+		tempSnake.top = (snakePos[i].y * cellHeight) + 'px';
+	}
+	switch (dir) {
+		case 'u': { y -= 1; break; }
+		case 'l': { x -= 1; break; }
+		case 'd': { y += 1; break; }
+		case 'r': { x += 1; break; }
+	}
+	x = x < 0 ? (x + rows)%rows : x%rows;
+	y = y < 0 ? (y + cols)%cols : y%cols;
+	snakePos[0].x = x;
+	snakePos[0].y = y;
+	snakeEl.left = x * cellWidth + 'px';
+	snakeEl.top = y * cellHeight + 'px';
+}
+
+
+const showSnake = (snakePos) => {
+	for (let i = 0; i < snakePos.length; ++i) {
+		let tempSnake = document.getElementById('snake' + i).style;
+		tempSnake.left = (snakePos[i].x * cellWidth) + 'px';
+		tempSnake.top = (snakePos[i].y * cellHeight) + 'px';
 	}
 }
 
@@ -85,34 +122,41 @@ const addSnake = () => {
 		x: snakePos[snakePos.length - 1].x -1,
 		y: snakePos[snakePos.length - 1].y +1
 	})
-	printf(snakePos);
 	// update the DOM
-	snakeContainer.innerHTML += '<div id=snake' + totalEaten + '></div>';
-	showSnake(snakePos);
+	let newSnake = document.createElement('div');
+	printf(newSnake);
+	newSnake.id = 'snake' + totalEaten;
+	// newSnake.style.position = 'absolute';
+	newSnake.style.width = cellWidth + 'px';
+	newSnake.style.height = cellHeight + 'px';
+	newSnake.style.left = snakeEl.left;
+	newSnake.style.top = snakeEl.top;
+
+	snakeContainer.appendChild(newSnake);
 	getNewFoodLocation();
 }
 
 
 const updateGrid = () => {
-	switch (dir) {
+	/* switch (dir) {
 		case 'u': { y -= 1; break; }
 		case 'l': { x -= 1; break; }
 		case 'd': { y += 1; break; }
 		case 'r': { x += 1; break; }
 	}
 	x = x < 0 ? (x + rows)%rows : x%rows;
-	y = y < 0 ? (y + cols)%cols : y%cols;
-	snakePos[0].x = x;
-	snakePos[0].y = y;
+	y = y < 0 ? (y + cols)%cols : y%cols; 
 
-	if (checkEaten()) addSnake(); 
 	updateSnakePos(x, y);
-	showSnake(snakePos);
+	*/
+
+	updateSnake(dir);
+	if (checkEaten()) addSnake(); 
 
 }
 
 
 getNewFoodLocation();
-setInterval(updateGrid, 300);
-
+const fps = 10;
+setInterval(updateGrid, 1000/fps);
 

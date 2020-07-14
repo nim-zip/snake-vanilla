@@ -25,6 +25,7 @@ body {
 [id^='snake'] {
 	background-color: white;
 	position: absolute;
+	border: 2px solid black;
 }
 
 #Food {
